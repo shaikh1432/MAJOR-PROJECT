@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ vendor_name }} - Vendor Details</title>
+    {% load static %}
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        .portfolio-image {
+            width: 100%;
+            height: 200px; /* Adjust height as needed */
+            object-fit: cover;
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="/">Event Services</a>
+        <div class="collapse navbar-collapse">
+            <ul class="navbar-nav ml-auto">
+                {% if user.is_authenticated %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'logout' %}">Logout</a>
+                    </li>
+                    <!-- Check if user is vendor -->
+                    {% if user.is_vendor %}  <!-- Add this check -->
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'vendor_dashboard' %}">Vendor Dashboard</a>
+                        </li>
+                    {% else %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'user_dashboard' %}">User Dashboard</a>
+                        </li>
+                    {% endif %}
+                {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'login' %}">Login</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'signup' %}">Signup</a>
+                    </li>
+                {% endif %}
+            </ul>
+        </div>
+    </nav>
+    <div class="container mt-5">
+        <h1>{{ vendor_name }}</h1>
+        <p><strong>Description:</strong> {{ description }}</p>
+        <h3>Portfolio</h3>
+        <div class="row">
+            {% for image in portfolio %}
+                <div class="col-md-6">
+                    <img src="{% static image %}" alt="{{ vendor_name }} Portfolio" class="portfolio-image">
+                </div>
+            {% endfor %}
+        </div>
+        <h3>Pricing</h3>
+        <ul>
+            {% for size, price in pricing.items %}
+                <li>{{ size }}: ${{ price }}</li>
+            {% endfor %}
+        </ul>
+        <h3>Customer Reviews</h3>
+        <ul>
+            {% for review in reviews %}
+                <li><strong>{{ review.user }}:</strong> {{ review.rating }} stars - {{ review.comment }}</li>
+            {% endfor %}
+        </ul>
+        <a href="#" class="btn btn-primary mt-3">Book Now</a>
+    </div>
+    <h3>Book Now</h3>
+<form method="POST">
+    {% csrf_token %}
+    <div class="form-group">
+        <label for="service_date">Select Date:</label>
+        <input type="date" id="service_date" name="service_date" class="form-control" required>
+    </div>
+    <div class="form-group">
+        <label for="service_size">Select Service Size:</label>
+        <select id="service_size" name="service_size" class="form-control" required>
+            <option value="Small">Small</option>
+            <option value="Medium">Medium</option>
+            <option value="Large">Large</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="special_requests">Special Requests:</label>
+        <textarea id="special_requests" name="special_requests" class="form-control" rows="3"></textarea>
+    </div>
+    <button type="submit" class="btn btn-primary">Submit Booking</button>
+</form>
+</body>
+</html>

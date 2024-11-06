@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Event Services</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        .service-card {
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin: 10px;
+            overflow: hidden;
+            transition: transform 0.2s;
+        }
+
+        .service-card:hover {
+            transform: scale(1.05);
+        }
+
+        .service-image {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="/">Event Services</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                {% if user.is_authenticated %}
+                {% if user.profile.is_vendor %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'vendor_dashboard' %}">Vendor Dashboard</a>
+                </li>
+                {% else %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'user_dashboard' %}">User Dashboard</a>
+                </li>
+                {% endif %}
+                <li class="nav-item">
+                    <form method="POST" action="{% url 'logout' %}" style="display: inline;">
+                        {% csrf_token %}
+                        <button type="submit" class="nav-link btn btn-link" style="color: inherit;">Logout</button>
+                    </form>
+                </li>
+                {% else %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'login' %}">Login</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'signup' %}">Signup</a>
+                </li>
+                {% endif %}
+            </ul>
+        </div>
+    </nav>
+    <div class="container text-center mt-5">
+        <h1>Welcome to Event Services</h1>
+        <p>Your one-stop solution for Catering, Decoration, Photography, and Venues.</p>
+
+        <!-- Search Bar -->
+        <form class="form-inline my-3">
+            <input class="form-control mr-2" type="search" placeholder="Search services" aria-label="Search">
+            <button class="btn btn-outline-success" type="submit">Search</button>
+        </form>
+
+        <div class="container mt-5">
+
+
+            <div class="container text-center mt-5">
+                <h1>Our Services</h1>
+                <div class="row mt-4">
+        
+                    <!-- Catering Services Card -->
+                    <div class="col-md-3">
+                        <div class="card">
+                            <img src="https://via.placeholder.com/150" class="card-img-top" alt="Catering Services">
+                            <div class="card-body">
+                                <h5 class="card-title">Catering Services</h5>
+                                <a href="{% url 'catering_services' %}" class="btn btn-primary">View Services</a>
+                            </div>
+                        </div>
+                    </div>
+        
+                    <!-- Decoration Services Card -->
+                    <div class="col-md-3">
+                        <div class="card">
+                            <img src="https://via.placeholder.com/150" class="card-img-top" alt="Decoration Services">
+                            <div class="card-body">
+                                <h5 class="card-title">Decoration Services</h5>
+                                <a href="{% url 'decoration_services' %}" class="btn btn-primary">View Services</a>
+                            </div>
+                        </div>
+                    </div>
+        
+                    <!-- Photography Services Card -->
+                    <div class="col-md-3">
+                        <div class="card">
+                            <img src="https://via.placeholder.com/150" class="card-img-top" alt="Photography Services">
+                            <div class="card-body">
+                                <h5 class="card-title">Photography Services</h5>
+                                <a href="{% url 'photography_services' %}" class="btn btn-primary">View Services</a>
+                            </div>
+                        </div>
+                    </div>
+        
+                    <!-- Venues Card -->
+                    <div class="col-md-3">
+                        <div class="card">
+                            <img src="https://via.placeholder.com/150" class="card-img-top" alt="Venues">
+                            <div class="card-body">
+                                <h5 class="card-title">Venues</h5>
+                                <a href="{% url 'venues_services' %}" class="btn btn-primary">View Venues</a>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+            <h2>Latest Blog Posts</h2>
+            <div class="row">
+                {% for post in latest_posts %}
+                <div class="col-md-4">
+                    <div class="card mb-4">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ post.title }}</h5>
+                            <p class="card-text">{{ post.content|truncatewords:20 }}</p>
+                            <a href="{% url 'blog_detail' post.id %}" class="btn btn-primary">Read More</a>
+                        </div>
+                        <div class="card-footer text-muted">
+                            <small>Posted by {{ post.author }} on {{ post.created_at }}</small>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+</body>
+
+</html>

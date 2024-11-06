@@ -1,0 +1,50 @@
+<!-- booking_confirmation.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Booking Confirmation</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="/">Event Services</a>
+        <div class="collapse navbar-collapse">
+            <ul class="navbar-nav ml-auto">
+                {% if user.is_authenticated %}
+                    {% if user.profile.is_vendor %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'vendor_dashboard' %}">Vendor Dashboard</a>
+                        </li>
+                    {% else %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'user_dashboard' %}">User Dashboard</a>
+                        </li>
+                    {% endif %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'logout' %}">Logout</a>
+                    </li>
+                {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'login' %}">Login</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'signup' %}">Signup</a>
+                    </li>
+                {% endif %}
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container mt-5">
+        <h2>Booking Confirmation</h2>
+        <p>Thank you for your booking!</p>
+        <p><strong>Vendor:</strong> {{ booking.vendor.name }}</p>
+        <p><strong>Date:</strong> {{ booking.service_date }}</p>
+        <p><strong>Service Size:</strong> {{ booking.service_size }}</p>
+        <p><strong>Special Requests:</strong> {{ booking.special_requests }}</p>
+    </div>
+</body>
+</html>
